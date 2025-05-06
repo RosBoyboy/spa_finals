@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <style>
+        .header {
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+        .footer {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="ui container" x-data="cartApp()" x-init="fetchCart()">
+        <div class="ui header">
+            <h1>Your Shopping Cart</h1>
+            <a href="products.html" class="ui right floated button">
+                <i class="arrow left icon"></i>
+                Continue Shopping
+            </a>
+        </div>
+
+        <div class="ui segment" x-show="cartItems.length > 0">
+            <div class="ui divided items">
+                <template x-for="item in cartItems" :key="item.id">
+                    <div class="item">
+                        <div class="ui tiny image">
+                            <img src="https://via.placeholder.com/100x100?text=Product">
+                        </div>
+                        <div class="content">
+                            <div class="header" x-text="item.product.name"></div>
+                            <div class="meta">
+                                <span x-text="'$' + item.product.price"></span>
+                            </div>
+                            <div class="description">
+                                <div class="ui action input">
+                                    <input type="number" min="1" x-model="item.quantity" @change="updateCartItem(item)">
+                                    <button class="ui red icon button" @click="removeCartItem(item)">
+                                        <i class="trash icon"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="extra">
+                                <span x-text="'Total: $' + (item.product.price * item.quantity).toFixed(2)"></span>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <div class="ui right aligned segment footer">
+                <h3 class="ui header">
+                    <span>Total: $</span>
+                    <span x-text="totalPrice.toFixed(2)"></span>
+                </h3>
+                <a href="checkout.html" class="ui large primary button">
+                    Proceed to Checkout
+                    <i class="right arrow icon"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="ui placeholder segment" x-show="cartItems.length === 0">
+            <div class="ui icon header">
+                <i class="shopping basket icon"></i>
+                Your cart is empty
+            </div>
+            <a href="products.html" class="ui primary button">Browse Products</a>
+        </div>
+
+        <div class="ui success message" x-show="showSuccess" x-transition>
+            <i class="close icon" @click="showSuccess = false"></i>
+            <div class="header">Success!</div>
+            <p x-text="successMessage"></p>
+        </div>
+    </div>
+
+    <script>
+        function cartApp() {
+            return {
+                cartItems: [],
+                totalPrice: 0,
+                showSuccess: false,
+                successMessage: '',
+                
+                fetchCart() {
+                    fetch('/api/cart/view/')
+                        .then(response => response.json())
+                        .then(data => {
+                            this.cartItems = data;
+                            this.calculateTotal();
+                        });
+                },
+                
+                calculateTotal() {
+                    this.totalPrice = this.cartItems.reduce((total, item) => {
+                        return total + (item.product.price * item.quantity);
+                    }, 0);
+                },
+                
+                updateCartItem(item) {
+                    fetch(`/api/cart/update/${item.id}/`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': this.getCookie('csrftoken')
+                        },
+                        body: JSON.stringify({
+                            quantity: item.quantity
+                        })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            this.showSuccessMessage('Cart updated successfully');
+                            this.calculateTotal();
+                        }
+                    });
+                },
+                
+                removeCartItem(item) {
+                    fetch(`/api/cart/remove/${item.id}/`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRFToken': this.getCookie('csrftoken')
+                        }
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            this.showSuccessMessage('Item removed from cart');
+                            this.fetchCart();
+                        }
+                    });
+                },
+                
+                showSuccessMessage(message) {
+                    this.successMessage = message;
+                    this.showSuccess = true;
+                    setTimeout(() => this.showSuccess = false, 3000);
+                },
+                
+                getCookie(name) {
+                    let cookieValue = null;
+                    if (document.cookie && document.cookie !== '') {
+                        const cookies = document.cookie.split(';');
+                        for (let i = 0; i < cookies.length; i++) {
+                            const cookie = cookies[i].trim();
+                            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                break;
+                            }
+                        }
+                    }
+                    return cookieValue;
+                }
+            }
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+</body>
+</html>

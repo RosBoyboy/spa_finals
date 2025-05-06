@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Products</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <style>
+        .header {
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="ui container" x-data="productForm()">
+        <div class="ui header">
+            <h1>Add New Product</h1>
+            <a href="products.html" class="ui right floated button">
+                <i class="arrow left icon"></i>
+                View Products
+            </a>
+        </div>
+
+        <div class="ui segment form-container">
+            <form class="ui form" @submit.prevent="submitForm">
+                <div class="field">
+                    <label>Product Name</label>
+                    <input type="text" placeholder="Product Name" x-model="product.name" required>
+                </div>
+                <div class="field">
+                    <label>Price</label>
+                    <input type="number" step="0.01" placeholder="Price" x-model="product.price" required>
+                </div>
+                <div class="field">
+                    <label>Description</label>
+                    <textarea rows="3" x-model="product.description"></textarea>
+                </div>
+                <div class="field">
+                    <label>Initial Inventory</label>
+                    <input type="number" placeholder="Inventory" x-model="product.inventory" required>
+                </div>
+                <button class="ui primary button" type="submit">Add Product</button>
+            </form>
+        </div>
+
+        <div class="ui success message" x-show="showSuccess" x-transition>
+            <i class="close icon" @click="showSuccess = false"></i>
+            <div class="header">Success!</div>
+            <p>Product added successfully.</p>
+        </div>
+    </div>
+
+    <script>
+        function productForm() {
+            return {
+                product: {
+                    name: '',
+                    price: 0,
+                    description: '',
+                    inventory: 1
+                },
+                showSuccess: false,
+                
+                submitForm() {
+                    fetch('/api/products/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': this.getCookie('csrftoken')
+                        },
+                        body: JSON.stringify(this.product)
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            this.showSuccess = true;
+                            this.resetForm();
+                            setTimeout(() => this.showSuccess = false, 3000);
+                        }
+                    });
+                },
+                
+                resetForm() {
+                    this.product = {
+                        name: '',
+                        price: 0,
+                        description: '',
+                        inventory: 1
+                    };
+                },
+                
+                getCookie(name) {
+                    let cookieValue = null;
+                    if (document.cookie && document.cookie !== '') {
+                        const cookies = document.cookie.split(';');
+                        for (let i = 0; i < cookies.length; i++) {
+                            const cookie = cookies[i].trim();
+                            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                break;
+                            }
+                        }
+                    }
+                    return cookieValue;
+                }
+            }
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+</body>
+</html>

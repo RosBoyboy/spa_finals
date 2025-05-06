@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <style>
+        .header {
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+        .order-summary {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="ui container" x-data="checkoutApp()" x-init="fetchCart()">
+        <div class="ui header">
+            <h1>Checkout</h1>
+            <a href="cart.html" class="ui right floated button">
+                <i class="arrow left icon"></i>
+                Back to Cart
+            </a>
+        </div>
+
+        <div class="ui stackable grid">
+            <div class="ten wide column">
+                <div class="ui form">
+                    <h3 class="ui dividing header">Customer Information</h3>
+                    <div class="field">
+                        <label>Full Name</label>
+                        <input type="text" placeholder="Full Name" x-model="customer.name">
+                    </div>
+                    <div class="field">
+                        <label>Email</label>
+                        <input type="email" placeholder="Email" x-model="customer.email">
+                    </div>
+                    <div class="field">
+                        <label>Shipping Address</label>
+                        <textarea rows="3" x-model="customer.address"></textarea>
+                    </div>
+                    <div class="field">
+                        <label>Payment Method</label>
+                        <div class="ui selection dropdown">
+                            <input type="hidden" x-model="customer.paymentMethod">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">Select Payment Method</div>
+                            <div class="menu">
+                                <div class="item" data-value="credit">Credit Card</div>
+                                <div class="item" data-value="paypal">PayPal</div>
+                                <div class="item" data-value="bank">Bank Transfer</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="six wide column">
+                <div class="ui segment order-summary">
+                    <h3 class="ui header">Order Summary</h3>
+                    <div class="ui divided items">
+                        <template x-for="item in cartItems" :key="item.id">
+                            <div class="item">
+                                <div class="content">
+                                    <div class="header" x-text="item.product.name"></div>
+                                    <div class="meta">
+                                        <span x-text="'$' + item.product.price + ' x ' + item.quantity"></span>
+                                    </div>
+                                    <div class="extra">
+                                        <span x-text="'$' + (item.product.price * item.quantity).toFixed(2)"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                    <div class="ui divider"></div>
+                    <div class="ui right aligned segment">
+                        <h3 class="ui header">
+                            <span>Total: $</span>
+                            <span x-text="totalPrice.toFixed(2)"></span>
+                        </h3>
+                        <button class="ui large primary fluid button" @click="placeOrder()">
+                            Place Order
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui success modal" x-show="showSuccess" x-transition>
+            <div class="header">Order Confirmation</div>
+            <div class="content">
+                <div class="description">
+                    <p>Thank you for your order!</p>
+                    <p>Your order has been placed successfully.</p>
+                    <p>Order Total: $<span x-text="totalPrice.toFixed(2)"></span></p>
+                </div>
+            </div>
+            <div class="actions">
+                <a href="products.html" class="ui positive button">
+                    Back to Shopping
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function checkoutApp() {
+            return {
+                cartItems: [],
+                totalPrice: 0,
+                customer: {
+                    name: '',
+                    email: '',
+                    address: '',
+                    paymentMethod: ''
+                },
+                showSuccess: false,
+                
+                fetchCart() {
+                    fetch('/api/cart/view/')
+                        .then(response => response.json())
+                        .then(data => {
+                            this.cartItems = data;
+                            this.calculateTotal();
+                        });
+                },
+                
+                calculateTotal() {
+                    this.totalPrice = this.cartItems.reduce((total, item) => {
+                        return total + (item.product.price * item.quantity);
+                    }, 0);
+                },
+                
+                placeOrder() {
+                    if (this.cartItems.length === 0) {
+                        alert('Your cart is empty');
+                        return;
+                    }
+                    
+                    if (!this.customer.name || !this.customer.email || !this.customer.address || !this.customer.paymentMethod) {
+                        alert('Please fill in all customer information');
+                        return;
+                    }
+                    
+                    const orderData = {
+                        customer: this.customer,
+                        cart: this.cartItems.map(item => item.id),
+                        total_price: this.totalPrice
+                    };
+                    
+                    fetch('/api/checkout/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': this.getCookie('csrftoken')
+                        },
+                        body: JSON.stringify(orderData)
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            this.showSuccess = true;
+                            $('.ui.modal').modal('show');
+                        }
+                    });
+                },
+                
+                getCookie(name) {
+                    let cookieValue = null;
+                    if (document.cookie && document.cookie !== '') {
+                        const cookies = document.cookie.split(';');
+                        for (let i = 0; i < cookies.length; i++) {
+                            const cookie = cookies[i].trim();
+                            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                break;
+                            }
+                        }
+                    }
+                    return cookieValue;
+                }
+            }
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.ui.dropdown').dropdown();
+        });
+    </script>
+</body>
+</html>

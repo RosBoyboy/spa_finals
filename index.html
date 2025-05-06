@@ -47,10 +47,18 @@
             <a class="item" href="#" @click.prevent="navigateTo('Chat/chat_list'); open = false;">Chat List</a>
         </div>
     </div>
+    <div class="ui dropdown item" x-data="{ open: false }" @click="open = !open">
+        Products <i class="dropdown icon"></i>
+        <div class="menu" x-show="open" @click.outside="open = false">
+            <a class="item" href="#" @click.prevent="navigateTo('Products/products'); open = false;">Products</a>
+            <a class="item" href="#" @click.prevent="navigateTo('Products/add_products'); open = false;">Add Porducts</a>
+            <a class="item" href="#" @click.prevent="navigateTo('Products/checkout'); open = false;">Checkout</a>
+            <a class="item" href="#" @click.prevent="navigateTo('Products/cart'); open = false;">Cart</a>
+        </div>
+    </div>
 
     <a class="item" @click.prevent="navigateTo('services/service')">Services</a>
-    <a class="item" @click.prevent="navigateTo('products/products')">Products</a>
-
+    
     <!-- Login/Logout Button -->
     <div class="right menu">
         <a class="ui green button"><i class="user icon"></i> Login</a>
