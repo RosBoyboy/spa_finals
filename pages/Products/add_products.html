@@ -3,18 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
     <title>Add Products</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="app.js" defer></script>
     <style>
-        .header {
-            margin-top: 20px;
-            margin-bottom: 30px;
-        }
-        .form-container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
+        .header { margin-top: 20px; margin-bottom: 30px; }
+        .form-container { max-width: 600px; margin: 0 auto; }
+        .image-preview { max-width: 200px; max-height: 200px; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -28,14 +25,17 @@
         </div>
 
         <div class="ui segment form-container">
-            <form class="ui form" @submit.prevent="submitForm">
+            <form class="ui form" @submit.prevent="submitForm" enctype="multipart/form-data">
                 <div class="field">
                     <label>Product Name</label>
                     <input type="text" placeholder="Product Name" x-model="product.name" required>
                 </div>
                 <div class="field">
                     <label>Price</label>
-                    <input type="number" step="0.01" placeholder="Price" x-model="product.price" required>
+                    <div class="ui right labeled input">
+                        <label for="amount" class="ui label">$</label>
+                        <input type="number" step="0.01" placeholder="0.00" x-model="product.price" required>
+                    </div>
                 </div>
                 <div class="field">
                     <label>Description</label>
@@ -43,9 +43,21 @@
                 </div>
                 <div class="field">
                     <label>Initial Inventory</label>
-                    <input type="number" placeholder="Inventory" x-model="product.inventory" required>
+                    <input type="number" min="0" placeholder="Inventory" x-model="product.inventory" required>
                 </div>
-                <button class="ui primary button" type="submit">Add Product</button>
+                <div class="field">
+                    <label>Product Image</label>
+                    <input type="file" id="productImage" @change="handleImageUpload" accept="image/*">
+                    <template x-if="imagePreview">
+                        <div>
+                            <img :src="imagePreview" class="image-preview">
+                            <button class="ui mini red button" @click="removeImage">Remove Image</button>
+                        </div>
+                    </template>
+                </div>
+                <button class="ui primary button" type="submit" :disabled="submitting">
+                    <span x-text="submitting ? 'Processing...' : 'Add Product'"></span>
+                </button>
             </form>
         </div>
 
@@ -53,6 +65,13 @@
             <i class="close icon" @click="showSuccess = false"></i>
             <div class="header">Success!</div>
             <p>Product added successfully.</p>
+            <p>You'll be redirected to products page in <span x-text="countdown"></span> seconds.</p>
+        </div>
+
+        <div class="ui error message" x-show="errorMessage" x-transition>
+            <i class="close icon" @click="errorMessage = ''"></i>
+            <div class="header">Error</div>
+            <p x-text="errorMessage"></p>
         </div>
     </div>
 
@@ -65,48 +84,76 @@
                     description: '',
                     inventory: 1
                 },
+                imageFile: null,
+                imagePreview: null,
                 showSuccess: false,
+                errorMessage: '',
+                submitting: false,
+                countdown: 5,
                 
-                submitForm() {
-                    fetch('/api/products/', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRFToken': this.getCookie('csrftoken')
-                        },
-                        body: JSON.stringify(this.product)
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            this.showSuccess = true;
-                            this.resetForm();
-                            setTimeout(() => this.showSuccess = false, 3000);
-                        }
-                    });
-                },
-                
-                resetForm() {
-                    this.product = {
-                        name: '',
-                        price: 0,
-                        description: '',
-                        inventory: 1
-                    };
-                },
-                
-                getCookie(name) {
-                    let cookieValue = null;
-                    if (document.cookie && document.cookie !== '') {
-                        const cookies = document.cookie.split(';');
-                        for (let i = 0; i < cookies.length; i++) {
-                            const cookie = cookies[i].trim();
-                            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                                break;
-                            }
-                        }
+                handleImageUpload(event) {
+                    const file = event.target.files[0];
+                    if (!file) return;
+                    
+                    if (!file.type.match('image.*')) {
+                        this.errorMessage = 'Please select an image file';
+                        return;
                     }
-                    return cookieValue;
+                    
+                    if (file.size > 2 * 1024 * 1024) { // 2MB limit
+                        this.errorMessage = 'Image size should be less than 2MB';
+                        return;
+                    }
+                    
+                    this.imageFile = file;
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        this.imagePreview = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                },
+                
+                removeImage() {
+                    this.imageFile = null;
+                    this.imagePreview = null;
+                    document.getElementById('productImage').value = '';
+                },
+                
+                async submitForm() {
+                    this.errorMessage = '';
+                    this.submitting = true;
+                    
+                    try {
+                        const formData = new FormData();
+                        formData.append('name', this.product.name);
+                        formData.append('price', this.product.price);
+                        formData.append('description', this.product.description);
+                        formData.append('inventory', this.product.inventory);
+                        
+                        if (this.imageFile) {
+                            formData.append('image', this.imageFile);
+                        }
+                        
+                        await Alpine.store('ecommerce').uploadFile('/products/', formData);
+                        
+                        this.showSuccess = true;
+                        this.startCountdown();
+                    } catch (error) {
+                        this.errorMessage = error.message || 'Failed to add product. Please try again.';
+                        console.error('Product submission error:', error);
+                    } finally {
+                        this.submitting = false;
+                    }
+                },
+                
+                startCountdown() {
+                    const timer = setInterval(() => {
+                        this.countdown--;
+                        if (this.countdown <= 0) {
+                            clearInterval(timer);
+                            window.location.href = 'products.html';
+                        }
+                    }, 1000);
                 }
             }
         }
