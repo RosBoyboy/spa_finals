@@ -1,16 +1,15 @@
 Alpine.store("settings", {
-    apiBaseUrl: "http://172.17.100.14:3347/default/api",
+    apiBaseUrl: "http://172.17.100.14:3347/user1/default/api",
     appName: "contact application",
 });
 
 Alpine.store("exam", {
-    apiExamBaseUrl: "http://172.17.100.14:3347/default/exam",
+    apiExamBaseUrl: "http://172.17.100.14:3347/user1/default/exam",
     appName: "exam",
 });
 
 Alpine.store("GlobalVariable", {
-    //contacts:Alpine.reactive([]),
-    contacts:Alpine.reactive({ 
+    contacts: Alpine.reactive({ 
         data: [], 
         total: 0,         
     }),
@@ -19,19 +18,19 @@ Alpine.store("GlobalVariable", {
 
 Alpine.store("GlobalFunctions", { 
     findContactById(id) {        
-        let contacts = Alpine.store("GlobalVariable").contacts.data; // Ensure `data` is always an array
+        let contacts = Alpine.store("GlobalVariable").contacts.data;
         let foundContact = contacts.find(c => Number(c.id) === Number(id));
         
         if (foundContact) {
-            return {...foundContact }; // Creates a new object to trigger reactivity
+            return { ...foundContact };
         } else {
-            return {}; // Returns an empty object if not found
+            return {};
         }
-        
     }
 });
 
 Alpine.store("ecommerce", {
+<<<<<<< HEAD
     apiBaseUrl: "http://172.17.100.14:3347/api",
     csrfToken: document.querySelector('meta[name="csrf-token"]')?.content || '',
     
@@ -91,4 +90,57 @@ Alpine.store("ecommerce", {
             throw error;
         }
     }
+=======
+    apiBaseUrl: "http://127.0.0.1:3347/user1/default/api",
+    csrfToken: document.querySelector('meta[name="csrf-token"]')?.content || '',
+
+    async fetchData(endpoint, options = {}) {
+        // Simulate API response with mock data
+        const mockData = {
+            "/products/": [
+                { id: 1, name: "Product 1", price: 10.99, inventory: 10, description: "Description 1", image: "" },
+                { id: 2, name: "Product 2", price: 20.99, inventory: 5, description: "Description 2", image: "" },
+            ],
+            "/cart/view/": JSON.parse(localStorage.getItem("cart") || "[]"),
+        };
+
+        return new Promise((resolve) => {
+            setTimeout(() => resolve(mockData[endpoint] || []), 500);
+        });
+    },
+
+    async postData(endpoint, data) {
+        if (endpoint === "/cart/add/") {
+            const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+            const existingItem = cart.find((item) => item.product.id === data.product_id);
+            if (existingItem) {
+                existingItem.quantity += data.quantity;
+            } else {
+                cart.push({ id: Date.now(), product: { id: data.product_id, ...data }, quantity: data.quantity });
+            }
+            localStorage.setItem("cart", JSON.stringify(cart));
+        }
+    },
+
+    async putData(endpoint, data) {
+        if (endpoint.startsWith("/cart/update/")) {
+            const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+            const itemId = parseInt(endpoint.split("/").pop());
+            const item = cart.find((item) => item.id === itemId);
+            if (item) {
+                item.quantity = data.quantity;
+            }
+            localStorage.setItem("cart", JSON.stringify(cart));
+        }
+    },
+
+    async deleteData(endpoint) {
+        if (endpoint.startsWith("/cart/remove/")) {
+            const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+            const itemId = parseInt(endpoint.split("/").pop());
+            const updatedCart = cart.filter((item) => item.id !== itemId);
+            localStorage.setItem("cart", JSON.stringify(updatedCart));
+        }
+    },
+>>>>>>> b51ff0b (Initial commit)
 });
