@@ -3,17 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD
-<<<<<<< HEAD
-    <meta name="csrf-token" content="{{ csrf_token }}">
-    <title>Checkout</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-    <script src="app.js" defer></script>
-=======
     <title>Checkout - E-Commerce</title>
     <base href="./">
->>>>>>> Initial commit
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -195,206 +186,6 @@
                         <label for="zip">ZIP/Postal Code</label>
                         <input type="text" id="zip" name="zip" required>
                     </div>
-<<<<<<< HEAD
-                    <div class="field" :class="{ error: errors.paymentMethod }">
-                        <label>Payment Method</label>
-                        <div class="ui selection dropdown">
-                            <input type="hidden" x-model="customer.paymentMethod">
-                            <i class="dropdown icon"></i>
-                            <div class="default text">Select Payment Method</div>
-                            <div class="menu">
-                                <div class="item" data-value="credit">Credit Card</div>
-                                <div class="item" data-value="paypal">PayPal</div>
-                                <div class="item" data-value="bank">Bank Transfer</div>
-=======
-    <title>Checkout - E-Commerce</title>
-    <base href="./">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-        }
-        header {
-            background-color: #333;
-            color: white;
-            padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin-left: 1rem;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-            display: flex;
-            gap: 2rem;
-        }
-        .checkout-form {
-            flex: 2;
-            background: white;
-            border-radius: 8px;
-            padding: 2rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .order-summary {
-            flex: 1;
-            background: white;
-            border-radius: 8px;
-            padding: 2rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            align-self: flex-start;
-        }
-        h2 {
-            margin-top: 0;
-        }
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-        }
-        input, select {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-        .form-row {
-            display: flex;
-            gap: 1rem;
-        }
-        .form-row .form-group {
-            flex: 1;
-        }
-        .checkout-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #eee;
-        }
-        .checkout-item-info {
-            display: flex;
-        }
-        .checkout-item-image {
-            width: 60px;
-            height: 60px;
-            background-color: #eee;
-            margin-right: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-size: cover;
-            background-position: center;
-        }
-        .checkout-total {
-            font-weight: bold;
-            font-size: 1.2rem;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 2px solid #333;
-        }
-        .place-order-btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1rem;
-            width: 100%;
-            margin-top: 1rem;
-        }
-        .back-link {
-            display: inline-block;
-            margin-top: 1rem;
-            color: #333;
-            text-decoration: none;
-        }
-        .payment-method {
-            margin-bottom: 1rem;
-        }
-        .payment-option {
-            display: block;
-            margin-bottom: 0.5rem;
-            padding: 0.5rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .payment-option.selected {
-            border-color: #4CAF50;
-            background-color: #f0fff0;
-        }
-        .payment-details {
-            display: none;
-            margin-top: 1rem;
-            padding: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background-color: #f9f9f9;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>E-Commerce Store</h1>
-        <nav>
-            <div class="ui dropdown item" x-data="{ open: false }" @click="open = !open">
-                Products <i class="dropdown icon"></i>
-                <div class="menu" x-show="open" @click.outside="open = false">
-                    <a class="item" href="Products/products.html">Products</a>
-                    <a class="item" href="Products/add_products.html">Add Products</a>
-                    <a class="item" href="Products/cart.html">Cart</a>
-                    <a class="item" href="Products/checkout.html">Checkout</a>
-                </div>
-            </div>
-        </nav>
-    </header>
-
-    <div class="container">
-        <div class="checkout-form">
-            <h2>Shipping Information</h2>
-            <form id="checkoutForm">
-                <div class="form-group">
-                    <label for="fullName">Full Name</label>
-                    <input type="text" id="fullName" name="fullName" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="address">Address</label>
-                    <input type="text" id="address" name="address" required>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="city">City</label>
-                        <input type="text" id="city" name="city" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="state">State/Province</label>
-                        <input type="text" id="state" name="state" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="zip">ZIP/Postal Code</label>
-                        <input type="text" id="zip" name="zip" required>
-                    </div>
-=======
->>>>>>> Initial commit
                     <div class="form-group">
                         <label for="country">Country</label>
                         <select id="country" name="country" required>
@@ -404,7 +195,6 @@
                             <option value="UK">United Kingdom</option>
                             <option value="AU">Australia</option>
                         </select>
-<<<<<<< HEAD
                     </div>
                 </div>
                 
@@ -430,58 +220,8 @@
                             <div class="form-group">
                                 <label for="cvv">CVV</label>
                                 <input type="text" id="cvv" name="cvv">
->>>>>>> b51ff0b (Initial commit)
                             </div>
                         </div>
-                        <span class="ui pointing red basic label" x-show="errors.paymentMethod" x-text="errors.paymentMethod"></span>
-=======
->>>>>>> Initial commit
-                    </div>
-<<<<<<< HEAD
-                </div>
-                
-                <h2>Payment Method</h2>
-                <div class="payment-method">
-                    <label class="payment-option" onclick="selectPayment('cod')">
-                        <input type="radio" name="paymentMethod" value="cod" checked> Cash on Delivery (COD)
-                    </label>
-                    
-                    <label class="payment-option" onclick="selectPayment('creditCard')">
-                        <input type="radio" name="paymentMethod" value="creditCard"> Credit/Debit Card
-                    </label>
-                    <div id="creditCardDetails" class="payment-details">
-                        <div class="form-group">
-                            <label for="cardNumber">Card Number</label>
-                            <input type="text" id="cardNumber" name="cardNumber">
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="expiry">Expiry Date</label>
-                                <input type="text" id="expiry" name="expiry" placeholder="MM/YY">
-                            </div>
-                            <div class="form-group">
-                                <label for="cvv">CVV</label>
-                                <input type="text" id="cvv" name="cvv">
-                            </div>
-                        </div>
-=======
-                    
-                    <label class="payment-option" onclick="selectPayment('bankTransfer')">
-                        <input type="radio" name="paymentMethod" value="bankTransfer"> Bank Transfer
-                    </label>
-                    <div id="bankTransferDetails" class="payment-details">
-                        <p>Please transfer to:</p>
-                        <p>Bank: Example Bank</p>
-                        <p>Account: 1234567890</p>
-                        <p>Reference: Your Order ID</p>
-                    </div>
-                    
-                    <label class="payment-option" onclick="selectPayment('onlineBank')">
-                        <input type="radio" name="paymentMethod" value="onlineBank"> Online Banking
-                    </label>
-                    <div id="onlineBankDetails" class="payment-details">
-                        <p>You will be redirected to your bank's payment gateway after placing the order.</p>
->>>>>>> b51ff0b (Initial commit)
                     </div>
                     
                     <label class="payment-option" onclick="selectPayment('bankTransfer')">
@@ -504,33 +244,6 @@
                 
                 <button type="submit" class="place-order-btn">Place Order</button>
             </form>
-<<<<<<< HEAD
-        </div>
-<<<<<<< HEAD
-
-        <div class="ui success modal" x-show="showSuccess" x-transition>
-            <div class="header">Order Confirmation</div>
-            <div class="content">
-                <div class="description">
-                    <p>Thank you for your order, <span x-text="customer.name"></span>!</p>
-                    <p>Your order has been placed successfully.</p>
-                    <p>Order Total: $<span x-text="totalPrice.toFixed(2)"></span></p>
-                    <p>A confirmation email has been sent to <span x-text="customer.email"></span></p>
-                </div>
-=======
-        
-        <div class="order-summary">
-            <h2>Order Summary</h2>
-            <div id="orderItems">
-                <!-- Order items will be populated by JavaScript -->
->>>>>>> b51ff0b (Initial commit)
-            </div>
-            <div class="checkout-total" id="orderTotal">
-                <!-- Order total will be populated by JavaScript -->
-            </div>
-            <a href="cart.html" class="back-link">← Back to Cart</a>
-=======
->>>>>>> Initial commit
         </div>
         
         <div class="order-summary">
@@ -546,47 +259,6 @@
     </div>
 
     <script>
-<<<<<<< HEAD
-<<<<<<< HEAD
-        function checkoutApp() {
-            return {
-                cartItems: [],
-                totalPrice: 0,
-                customer: {
-                    name: '',
-                    email: '',
-                    address: '',
-                    paymentMethod: ''
-                },
-                errors: {},
-                showSuccess: false,
-                errorMessage: '',
-                processing: false,
-                
-                get hasStockIssues() {
-                    return this.cartItems.some(item => item.quantity > item.product.inventory);
-                },
-                
-                async init() {
-                    try {
-                        await this.fetchCart();
-                        $('.ui.dropdown').dropdown();
-                    } catch (error) {
-                        this.errorMessage = 'Failed to load cart. Please try again later.';
-                        console.error('Checkout initialization error:', error);
-                    }
-                },
-                
-                async fetchCart() {
-                    try {
-                        const data = await Alpine.store('ecommerce').fetchData('/cart/view/');
-                        this.cartItems = data;
-                        this.calculateTotal();
-                    } catch (error) {
-                        throw error;
-                    }
-                },
-=======
         // Load checkout cart from localStorage
         const checkoutCart = JSON.parse(localStorage.getItem('checkoutCart')) || [];
         const products = JSON.parse(localStorage.getItem('products')) || [];
@@ -609,94 +281,9 @@
                 const product = products.find(p => p.id === item.id) || item;
                 const itemTotal = item.price * item.quantity;
                 subtotal += itemTotal;
->>>>>>> Initial commit
                 
                 const imageStyle = product.image === 'Image Placeholder' ? '' : `style="background-image: url('${product.image}')"`;
                 
-<<<<<<< HEAD
-                validateForm() {
-                    this.errors = {};
-                    let isValid = true;
-                    
-                    if (!this.customer.name) {
-                        this.errors.name = 'Please enter your full name';
-                        isValid = false;
-                    }
-                    
-                    if (!this.customer.email) {
-                        this.errors.email = 'Please enter your email address';
-                        isValid = false;
-                    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.customer.email)) {
-                        this.errors.email = 'Please enter a valid email address';
-                        isValid = false;
-                    }
-                    
-                    if (!this.customer.address) {
-                        this.errors.address = 'Please enter your shipping address';
-                        isValid = false;
-                    }
-                    
-                    if (!this.customer.paymentMethod) {
-                        this.errors.paymentMethod = 'Please select a payment method';
-                        isValid = false;
-                    }
-                    
-                    return isValid;
-                },
-                
-                async placeOrder() {
-                    if (!this.validateForm()) return;
-                    
-                    if (this.cartItems.length === 0) {
-                        this.errorMessage = 'Your cart is empty';
-                        return;
-                    }
-                    
-                    if (this.hasStockIssues) {
-                        this.errorMessage = 'Some items in your cart exceed available stock. Please adjust quantities before checkout.';
-                        return;
-                    }
-                    
-                    this.processing = true;
-                    
-                    try {
-                        const orderData = {
-                            customer: this.customer,
-                            items: this.cartItems.map(item => ({
-                                product_id: item.product.id,
-                                quantity: item.quantity,
-                                price: item.product.price
-                            })),
-                            total_price: this.totalPrice,
-                            payment_method: this.customer.paymentMethod
-                        };
-                        
-                        await Alpine.store('ecommerce').postData('/checkout/', orderData);
-                        
-                        this.showSuccess = true;
-                        $('.ui.modal').modal('show');
-                    } catch (error) {
-                        this.errorMessage = error.message || 'Failed to place order. Please try again.';
-                        $('.ui.modal').modal('show');
-                        console.error('Order placement error:', error);
-                    } finally {
-                        this.processing = false;
-                    }
-                }
-=======
-        // Load checkout cart from localStorage
-        const checkoutCart = JSON.parse(localStorage.getItem('checkoutCart')) || [];
-        const products = JSON.parse(localStorage.getItem('products')) || [];
-        
-        function renderOrderSummary() {
-            const orderItemsElement = document.getElementById('orderItems');
-            const orderTotalElement = document.getElementById('orderTotal');
-            
-            if (checkoutCart.length === 0) {
-                orderItemsElement.innerHTML = '<p>Your cart is empty</p>';
-                orderTotalElement.innerHTML = '<p>Total: $0.00</p>';
-                return;
-=======
                 itemsHTML += `
                     <div class="checkout-item">
                         <div class="checkout-item-info">
@@ -756,86 +343,9 @@
                 document.getElementById('bankTransferDetails').style.display = 'block';
             } else if (method === 'onlineBank') {
                 document.getElementById('onlineBankDetails').style.display = 'block';
->>>>>>> Initial commit
-            }
-            
-            let itemsHTML = '';
-            let subtotal = 0;
-            
-            checkoutCart.forEach(item => {
-                // Find the product details from the products list
-                const product = products.find(p => p.id === item.id) || item;
-                const itemTotal = item.price * item.quantity;
-                subtotal += itemTotal;
-                
-                const imageStyle = product.image === 'Image Placeholder' ? '' : `style="background-image: url('${product.image}')"`;
-                
-                itemsHTML += `
-                    <div class="checkout-item">
-                        <div class="checkout-item-info">
-                            <div class="checkout-item-image" ${imageStyle}>
-                                ${product.image === 'Image Placeholder' ? 'Img' : ''}
-                            </div>
-                            <div>
-                                <h3>${product.name}</h3>
-                                <p>Qty: ${item.quantity}</p>
-                            </div>
-                        </div>
-                        <div class="checkout-item-price">$${itemTotal.toFixed(2)}</div>
-                    </div>
-                `;
-            });
-            
-            orderItemsElement.innerHTML = itemsHTML;
-            
-            const tax = subtotal * 0.1; // 10% tax
-            const total = subtotal + tax;
-            
-            orderTotalElement.innerHTML = `
-                <div style="display: flex; justify-content: space-between;">
-                    <span>Subtotal:</span>
-                    <span>$${subtotal.toFixed(2)}</span>
-                </div>
-                <div style="display: flex; justify-content: space-between;">
-                    <span>Shipping:</span>
-                    <span>$0.00</span>
-                </div>
-                <div style="display: flex; justify-content: space-between;">
-                    <span>Tax:</span>
-                    <span>$${tax.toFixed(2)}</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; margin-top: 1rem;">
-                    <strong>Total:</strong>
-                    <strong>$${total.toFixed(2)}</strong>
-                </div>
-            `;
-        }
-        
-<<<<<<< HEAD
-        function selectPayment(method) {
-            // Update selected style
-            document.querySelectorAll('.payment-option').forEach(option => {
-                option.classList.remove('selected');
-            });
-            event.currentTarget.classList.add('selected');
-            
-            // Show relevant payment details
-            document.querySelectorAll('.payment-details').forEach(details => {
-                details.style.display = 'none';
-            });
-            
-            if (method === 'creditCard') {
-                document.getElementById('creditCardDetails').style.display = 'block';
-            } else if (method === 'bankTransfer') {
-                document.getElementById('bankTransferDetails').style.display = 'block';
-            } else if (method === 'onlineBank') {
-                document.getElementById('onlineBankDetails').style.display = 'block';
->>>>>>> b51ff0b (Initial commit)
             }
         }
         
-=======
->>>>>>> Initial commit
         document.getElementById('checkoutForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -852,11 +362,7 @@
             localStorage.removeItem('checkoutCart');
             
             // Redirect to products page after successful purchase
-<<<<<<< HEAD
-            window.location.href = 'Products/products.html';
-=======
             window.location.href = 'checkout.html';
->>>>>>> Initial commit
         });
         
         // Initialize the page
