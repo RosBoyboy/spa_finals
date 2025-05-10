@@ -3,146 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD
-<<<<<<< HEAD
-    <meta name="csrf-token" content="{{ csrf_token }}">
-    <title>Products</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-    <script src="app.js" defer></script>
-=======
-    <title>Products - E-Commerce</title>
->>>>>>> Initial commit
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-        }
-        header {
-            background-color: #333;
-            color: white;
-            padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin-left: 1rem;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-        .products {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-        .product-card {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-        }
-        .product-card:hover {
-            transform: translateY(-5px);
-        }
-        .product-image {
-            height: 200px;
-            background-color: #eee;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-size: cover;
-            background-position: center;
-        }
-        .product-info {
-            padding: 1rem;
-        }
-        .product-price {
-            font-weight: bold;
-            color: #e63946;
-            margin: 0.5rem 0;
-        }
-        .product-actions {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 1rem;
-        }
-        button {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .add-to-cart {
-            background-color: #4CAF50;
-            color: white;
-        }
-        .view-details {
-            background-color: #2196F3;
-            color: white;
-        }
-        .add-product-btn {
-            background-color: #FF9800;
-            color: white;
-            margin-bottom: 1rem;
-            padding: 0.75rem 1.5rem;
-        }
-    </style>
-</head>
-<body>
-<<<<<<< HEAD
-    <div class="ui container" x-data="productApp()" x-init="init()">
-        <div class="ui header">
-            <h1>Our Products</h1>
-            <div class="cart-icon">
-                <a href="cart.html" class="ui teal button">
-                    <i class="shopping cart icon"></i>
-                    <span x-text="cartCount" class="ui circular label" x-show="cartCount > 0"></span>
-                </a>
-                <a href="add_products.html" class="ui primary button">
-                    <i class="plus icon"></i>
-                    Add Product
-                </a>
-            </div>
-        </div>
-
-        <div class="ui link cards" x-show="products.length > 0">
-            <template x-for="product in products" :key="product.id">
-                <div class="card product-card">
-                    <div class="image">
-                        <img :src="product.image || 'https://via.placeholder.com/300x200?text=Product+Image'">
-                    </div>
-                    <div class="content">
-                        <div class="header" x-text="product.name"></div>
-                        <div class="meta">
-                            <span class="price" x-text="'$' + product.price"></span>
-                            <span class="inventory" x-text="'In Stock: ' + product.inventory" 
-                                  :class="{ 'red': product.inventory < 5, 'green': product.inventory >= 5 }"></span>
-                        </div>
-                        <div class="description" x-text="product.description || 'No description available'"></div>
-                    </div>
-                    <div class="extra content">
-                        <div class="ui action input" x-show="product.inventory > 0">
-                            <input type="number" min="1" :max="product.inventory" value="1" x-model="product.quantity">
-                            <button class="ui teal right labeled icon button" @click="addToCart(product)" 
-                                    :disabled="product.inventory < 1">
-                                <i class="cart plus icon"></i>
-                                Add to Cart
-                            </button>
-                        </div>
-                        <div class="ui red message" x-show="product.inventory < 1">
-                            Out of Stock
-                        </div>
-                    </div>
-=======
     <title>Products - E-Commerce</title>
     <style>
         body {
@@ -229,18 +89,6 @@
     </style>
 </head>
 <body>
-    <header>
-        <h1>E-Commerce Store</h1>
-        <nav>
-            <div class="ui dropdown item" x-data="{ open: false }" @click="open = !open">
-                Products <i class="dropdown icon"></i>
-                <div class="menu" x-show="open" @click.outside="open = false">
-                    <a class="item" href="Products/products.html">Products</a>
-                    <a class="item" href="Products/add_products.html">Add Products</a>
-                    <a class="item" href="Products/cart.html">Cart</a>
-                    <a class="item" href="Products/checkout.html">Checkout</a>
->>>>>>> b51ff0b (Initial commit)
-=======
     <header>
         <h1>E-Commerce Store</h1>
         <nav>
@@ -249,26 +97,15 @@
                     <a class="item" href="add_products.html">Add Products</a>
                     <a class="item" href="cart.html">Cart</a>
                     <a class="item" href="checkout.html">Checkout</a>
->>>>>>> Initial commit
                 </div>
         </nav>
     </header>
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-        <div class="empty-state" x-show="products.length === 0 && !loading">
-            <div class="ui icon header">
-                <i class="box icon"></i>
-                No products available
-            </div>
-            <a href="add_products.html" class="ui primary button">Add New Product</a>
-=======
     <div class="container">
         <a href="#" onclick="navigate('add_product.html')" class="add-product-btn">Add New Product</a>
         
         <div class="products" id="productsContainer">
             <!-- Products will be loaded here by JavaScript -->
->>>>>>> Initial commit
         </div>
     </div>
 
@@ -305,121 +142,6 @@
             }
         ];
 
-<<<<<<< HEAD
-        <div class="ui success message" x-show="showSuccess" x-transition>
-            <i class="close icon" @click="showSuccess = false"></i>
-            <div class="header">Success!</div>
-            <p>Product added to cart successfully.</p>
-=======
-    <div class="container">
-        <a href="#" onclick="navigate('add_product.html')" class="add-product-btn">Add New Product</a>
-        
-        <div class="products" id="productsContainer">
-            <!-- Products will be loaded here by JavaScript -->
->>>>>>> b51ff0b (Initial commit)
-        </div>
-=======
-        // Load products from localStorage or initialize with sample data
-        let products = JSON.parse(localStorage.getItem('products'));
-        if (!products || products.length === 0) {
-            products = initialProducts;
-            localStorage.setItem('products', JSON.stringify(products));
-        }
->>>>>>> Initial commit
-
-        // Render products
-        function renderProducts() {
-            const container = document.getElementById('productsContainer');
-            container.innerHTML = '';
-
-<<<<<<< HEAD
-    <script>
-<<<<<<< HEAD
-        function productApp() {
-            return {
-                products: [],
-                cartCount: 0,
-                loading: true,
-                showSuccess: false,
-                errorMessage: '',
-                
-                async init() {
-                    try {
-                        await this.fetchProducts();
-                        await this.updateCartCount();
-                    } catch (error) {
-                        this.errorMessage = 'Failed to load data. Please try again later.';
-                        console.error('Initialization error:', error);
-                    } finally {
-                        this.loading = false;
-                    }
-                },
-=======
-            products.forEach(product => {
-                const productCard = document.createElement('div');
-                productCard.className = 'product-card';
->>>>>>> Initial commit
-                
-                const imageStyle = product.image === 'Image Placeholder' ? '' : `style="background-image: url('${product.image}')"`;
-                
-                productCard.innerHTML = `
-                    <div class="product-image" ${imageStyle}>
-                        ${product.image === 'Image Placeholder' ? 'Image Placeholder' : ''}
-                    </div>
-                    <div class="product-info">
-                        <h3>${product.name}</h3>
-                        <p class="product-description">${product.description}</p>
-                        <p class="product-price">$${product.price.toFixed(2)}</p>
-                        <div class="product-actions">
-                            <button class="view-details">Details</button>
-                            <button class="add-to-cart" onclick="addToCart(${product.id})">Add to Cart</button>
-                        </div>
-                    </div>
-                `;
-                
-<<<<<<< HEAD
-                async updateCartCount() {
-                    try {
-                        const cart = await Alpine.store('ecommerce').fetchData('/cart/view/');
-                        this.cartCount = cart.reduce((total, item) => total + item.quantity, 0);
-                    } catch (error) {
-                        console.error('Cart count update error:', error);
-                    }
-                }
-=======
-        // Sample initial products (will be replaced by localStorage data)
-        const initialProducts = [
-            {
-                id: 1,
-                name: "Smartphone X",
-                price: 599.99,
-                description: "Latest smartphone with advanced features.",
-                image: "Image Placeholder"
-            },
-            {
-                id: 2,
-                name: "Wireless Headphones",
-                price: 199.99,
-                description: "Noise cancelling wireless headphones.",
-                image: "Image Placeholder"
-            },
-            {
-                id: 3,
-                name: "Smart Watch",
-                price: 249.99,
-                description: "Track your fitness with this smart watch.",
-                image: "Image Placeholder"
-            },
-            {
-                id: 4,
-                name: "Laptop Pro",
-                price: 1299.99,
-                description: "High performance laptop for professionals.",
-                image: "Image Placeholder"
->>>>>>> b51ff0b (Initial commit)
-            }
-        ];
-
         // Load products from localStorage or initialize with sample data
         let products = JSON.parse(localStorage.getItem('products'));
         if (!products || products.length === 0) {
@@ -481,36 +203,6 @@
             localStorage.setItem('cart', JSON.stringify(cart));
             alert(`${product.name} added to cart!`);
         }
-=======
-                container.appendChild(productCard);
-            });
-        }
-
-        // Cart storage
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        
-        function addToCart(productId) {
-            const product = products.find(p => p.id === productId);
-            
-            if (!product) return;
-            
-            const existingItem = cart.find(item => item.id === productId);
-            
-            if (existingItem) {
-                existingItem.quantity += 1;
-            } else {
-                cart.push({ 
-                    id: product.id,
-                    name: product.name,
-                    price: product.price,
-                    quantity: 1
-                });
-            }
-            
-            localStorage.setItem('cart', JSON.stringify(cart));
-            alert(`${product.name} added to cart!`);
-        }
->>>>>>> Initial commit
         
         function navigate(page) {
             window.location.href = page;
