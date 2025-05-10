@@ -4,46 +4,198 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <<<<<<< HEAD
+<<<<<<< HEAD
     <meta name="csrf-token" content="{{ csrf_token }}">
     <title>Checkout</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="app.js" defer></script>
+=======
+    <title>Checkout - E-Commerce</title>
+    <base href="./">
+>>>>>>> Initial commit
     <style>
-        .header { margin-top: 20px; margin-bottom: 30px; }
-        .order-summary { margin-top: 30px; }
-        .loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: flex; justify-content: center; align-items: center; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1rem;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: flex;
+            gap: 2rem;
+        }
+        .checkout-form {
+            flex: 2;
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .order-summary {
+            flex: 1;
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            align-self: flex-start;
+        }
+        h2 {
+            margin-top: 0;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
+        .checkout-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        .checkout-item-info {
+            display: flex;
+        }
+        .checkout-item-image {
+            width: 60px;
+            height: 60px;
+            background-color: #eee;
+            margin-right: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-size: cover;
+            background-position: center;
+        }
+        .checkout-total {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid #333;
+        }
+        .place-order-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 1rem;
+            color: #333;
+            text-decoration: none;
+        }
+        .payment-method {
+            margin-bottom: 1rem;
+        }
+        .payment-option {
+            display: block;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .payment-option.selected {
+            border-color: #4CAF50;
+            background-color: #f0fff0;
+        }
+        .payment-details {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
     </style>
 </head>
 <body>
-    <div class="ui container" x-data="checkoutApp()" x-init="init()">
-        <div class="ui header">
-            <h1>Checkout</h1>
-            <a href="cart.html" class="ui right floated button">
-                <i class="arrow left icon"></i>
-                Back to Cart
-            </a>
-        </div>
+    <header>
+        <h1>E-Commerce Store</h1>
+        <nav>
+                <div class="nav-links">
+                    <a class="item" href="products.html">Products</a>
+                    <a class="item" href="add_products.html">Add Products</a>
+                    <a class="item" href="cart.html">Cart</a>
+                    <a class="item" href="checkout.html">Checkout</a>
+                </div>
+        </nav>
+    </header>
 
-        <div class="ui stackable grid">
-            <div class="ten wide column">
-                <div class="ui form">
-                    <h3 class="ui dividing header">Customer Information</h3>
-                    <div class="field" :class="{ error: errors.name }">
-                        <label>Full Name</label>
-                        <input type="text" placeholder="Full Name" x-model="customer.name">
-                        <span class="ui pointing red basic label" x-show="errors.name" x-text="errors.name"></span>
+    <div class="container">
+        <div class="checkout-form">
+            <h2>Shipping Information</h2>
+            <form id="checkoutForm">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" name="fullName" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="text" id="address" name="address" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" id="city" name="city" required>
                     </div>
-                    <div class="field" :class="{ error: errors.email }">
-                        <label>Email</label>
-                        <input type="email" placeholder="Email" x-model="customer.email">
-                        <span class="ui pointing red basic label" x-show="errors.email" x-text="errors.email"></span>
+                    <div class="form-group">
+                        <label for="state">State/Province</label>
+                        <input type="text" id="state" name="state" required>
                     </div>
-                    <div class="field" :class="{ error: errors.address }">
-                        <label>Shipping Address</label>
-                        <textarea rows="3" x-model="customer.address"></textarea>
-                        <span class="ui pointing red basic label" x-show="errors.address" x-text="errors.address"></span>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="zip">ZIP/Postal Code</label>
+                        <input type="text" id="zip" name="zip" required>
                     </div>
+<<<<<<< HEAD
                     <div class="field" :class="{ error: errors.paymentMethod }">
                         <label>Payment Method</label>
                         <div class="ui selection dropdown">
@@ -241,6 +393,8 @@
                         <label for="zip">ZIP/Postal Code</label>
                         <input type="text" id="zip" name="zip" required>
                     </div>
+=======
+>>>>>>> Initial commit
                     <div class="form-group">
                         <label for="country">Country</label>
                         <select id="country" name="country" required>
@@ -250,6 +404,7 @@
                             <option value="UK">United Kingdom</option>
                             <option value="AU">Australia</option>
                         </select>
+<<<<<<< HEAD
                     </div>
                 </div>
                 
@@ -279,46 +434,35 @@
                             </div>
                         </div>
                         <span class="ui pointing red basic label" x-show="errors.paymentMethod" x-text="errors.paymentMethod"></span>
+=======
+>>>>>>> Initial commit
                     </div>
 <<<<<<< HEAD
                 </div>
-            </div>
-
-            <div class="six wide column">
-                <div class="ui segment order-summary">
-                    <h3 class="ui header">Order Summary</h3>
-                    <div class="ui divided items">
-                        <template x-for="item in cartItems" :key="item.id">
-                            <div class="item">
-                                <div class="ui tiny image">
-                                    <img :src="item.product.image || 'https://via.placeholder.com/100x100?text=Product'">
-                                </div>
-                                <div class="content">
-                                    <div class="header" x-text="item.product.name"></div>
-                                    <div class="meta">
-                                        <span x-text="'$' + item.product.price + ' x ' + item.quantity"></span>
-                                    </div>
-                                    <div class="extra">
-                                        <span x-text="'$' + (item.product.price * item.quantity).toFixed(2)"></span>
-                                        <div class="ui red label" x-show="item.quantity > item.product.inventory">
-                                            Only <span x-text="item.product.inventory"></span> available
-                                        </div>
-                                    </div>
-                                </div>
+                
+                <h2>Payment Method</h2>
+                <div class="payment-method">
+                    <label class="payment-option" onclick="selectPayment('cod')">
+                        <input type="radio" name="paymentMethod" value="cod" checked> Cash on Delivery (COD)
+                    </label>
+                    
+                    <label class="payment-option" onclick="selectPayment('creditCard')">
+                        <input type="radio" name="paymentMethod" value="creditCard"> Credit/Debit Card
+                    </label>
+                    <div id="creditCardDetails" class="payment-details">
+                        <div class="form-group">
+                            <label for="cardNumber">Card Number</label>
+                            <input type="text" id="cardNumber" name="cardNumber">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="expiry">Expiry Date</label>
+                                <input type="text" id="expiry" name="expiry" placeholder="MM/YY">
                             </div>
-                        </template>
-                    </div>
-                    <div class="ui divider"></div>
-                    <div class="ui right aligned segment">
-                        <h3 class="ui header">
-                            <span>Total: $</span>
-                            <span x-text="totalPrice.toFixed(2)"></span>
-                        </h3>
-                        <button class="ui large primary fluid button" @click="placeOrder()" :class="{ disabled: hasStockIssues || processing }">
-                            <span x-text="processing ? 'Processing...' : 'Place Order'"></span>
-                        </button>
-                        <div class="ui red message" x-show="hasStockIssues">
-                            Please adjust quantities in your cart before checkout
+                            <div class="form-group">
+                                <label for="cvv">CVV</label>
+                                <input type="text" id="cvv" name="cvv">
+                            </div>
                         </div>
 =======
                     
@@ -339,10 +483,28 @@
                         <p>You will be redirected to your bank's payment gateway after placing the order.</p>
 >>>>>>> b51ff0b (Initial commit)
                     </div>
+                    
+                    <label class="payment-option" onclick="selectPayment('bankTransfer')">
+                        <input type="radio" name="paymentMethod" value="bankTransfer"> Bank Transfer
+                    </label>
+                    <div id="bankTransferDetails" class="payment-details">
+                        <p>Please transfer to:</p>
+                        <p>Bank: Example Bank</p>
+                        <p>Account: 1234567890</p>
+                        <p>Reference: Your Order ID</p>
+                    </div>
+                    
+                    <label class="payment-option" onclick="selectPayment('onlineBank')">
+                        <input type="radio" name="paymentMethod" value="onlineBank"> Online Banking
+                    </label>
+                    <div id="onlineBankDetails" class="payment-details">
+                        <p>You will be redirected to your bank's payment gateway after placing the order.</p>
+                    </div>
                 </div>
                 
                 <button type="submit" class="place-order-btn">Place Order</button>
             </form>
+<<<<<<< HEAD
         </div>
 <<<<<<< HEAD
 
@@ -367,26 +529,24 @@
                 <!-- Order total will be populated by JavaScript -->
             </div>
             <a href="cart.html" class="back-link">← Back to Cart</a>
+=======
+>>>>>>> Initial commit
         </div>
-
-        <div class="ui error modal" x-show="errorMessage" x-transition>
-            <div class="header">Order Error</div>
-            <div class="content">
-                <p x-text="errorMessage"></p>
+        
+        <div class="order-summary">
+            <h2>Order Summary</h2>
+            <div id="orderItems">
+                <!-- Order items will be populated by JavaScript -->
             </div>
-            <div class="actions">
-                <div class="ui button" @click="errorMessage = ''">OK</div>
+            <div class="checkout-total" id="orderTotal">
+                <!-- Order total will be populated by JavaScript -->
             </div>
-        </div>
-
-        <div class="loading-overlay" x-show="processing">
-            <div class="ui active inverted dimmer">
-                <div class="ui text loader">Processing Your Order...</div>
-            </div>
+            <a href="cart.html" class="back-link">← Back to Cart</a>
         </div>
     </div>
 
     <script>
+<<<<<<< HEAD
 <<<<<<< HEAD
         function checkoutApp() {
             return {
@@ -426,13 +586,34 @@
                         throw error;
                     }
                 },
+=======
+        // Load checkout cart from localStorage
+        const checkoutCart = JSON.parse(localStorage.getItem('checkoutCart')) || [];
+        const products = JSON.parse(localStorage.getItem('products')) || [];
+        
+        function renderOrderSummary() {
+            const orderItemsElement = document.getElementById('orderItems');
+            const orderTotalElement = document.getElementById('orderTotal');
+            
+            if (checkoutCart.length === 0) {
+                orderItemsElement.innerHTML = '<p>Your cart is empty</p>';
+                orderTotalElement.innerHTML = '<p>Total: $0.00</p>';
+                return;
+            }
+            
+            let itemsHTML = '';
+            let subtotal = 0;
+            
+            checkoutCart.forEach(item => {
+                // Find the product details from the products list
+                const product = products.find(p => p.id === item.id) || item;
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+>>>>>>> Initial commit
                 
-                calculateTotal() {
-                    this.totalPrice = this.cartItems.reduce((total, item) => {
-                        return total + (item.product.price * item.quantity);
-                    }, 0);
-                },
+                const imageStyle = product.image === 'Image Placeholder' ? '' : `style="background-image: url('${product.image}')"`;
                 
+<<<<<<< HEAD
                 validateForm() {
                     this.errors = {};
                     let isValid = true;
@@ -515,19 +696,7 @@
                 orderItemsElement.innerHTML = '<p>Your cart is empty</p>';
                 orderTotalElement.innerHTML = '<p>Total: $0.00</p>';
                 return;
-            }
-            
-            let itemsHTML = '';
-            let subtotal = 0;
-            
-            checkoutCart.forEach(item => {
-                // Find the product details from the products list
-                const product = products.find(p => p.id === item.id) || item;
-                const itemTotal = item.price * item.quantity;
-                subtotal += itemTotal;
-                
-                const imageStyle = product.image === 'Image Placeholder' ? '' : `style="background-image: url('${product.image}')"`;
-                
+=======
                 itemsHTML += `
                     <div class="checkout-item">
                         <div class="checkout-item-info">
@@ -587,10 +756,86 @@
                 document.getElementById('bankTransferDetails').style.display = 'block';
             } else if (method === 'onlineBank') {
                 document.getElementById('onlineBankDetails').style.display = 'block';
+>>>>>>> Initial commit
+            }
+            
+            let itemsHTML = '';
+            let subtotal = 0;
+            
+            checkoutCart.forEach(item => {
+                // Find the product details from the products list
+                const product = products.find(p => p.id === item.id) || item;
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+                
+                const imageStyle = product.image === 'Image Placeholder' ? '' : `style="background-image: url('${product.image}')"`;
+                
+                itemsHTML += `
+                    <div class="checkout-item">
+                        <div class="checkout-item-info">
+                            <div class="checkout-item-image" ${imageStyle}>
+                                ${product.image === 'Image Placeholder' ? 'Img' : ''}
+                            </div>
+                            <div>
+                                <h3>${product.name}</h3>
+                                <p>Qty: ${item.quantity}</p>
+                            </div>
+                        </div>
+                        <div class="checkout-item-price">$${itemTotal.toFixed(2)}</div>
+                    </div>
+                `;
+            });
+            
+            orderItemsElement.innerHTML = itemsHTML;
+            
+            const tax = subtotal * 0.1; // 10% tax
+            const total = subtotal + tax;
+            
+            orderTotalElement.innerHTML = `
+                <div style="display: flex; justify-content: space-between;">
+                    <span>Subtotal:</span>
+                    <span>$${subtotal.toFixed(2)}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span>Shipping:</span>
+                    <span>$0.00</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span>Tax:</span>
+                    <span>$${tax.toFixed(2)}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-top: 1rem;">
+                    <strong>Total:</strong>
+                    <strong>$${total.toFixed(2)}</strong>
+                </div>
+            `;
+        }
+        
+<<<<<<< HEAD
+        function selectPayment(method) {
+            // Update selected style
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+            
+            // Show relevant payment details
+            document.querySelectorAll('.payment-details').forEach(details => {
+                details.style.display = 'none';
+            });
+            
+            if (method === 'creditCard') {
+                document.getElementById('creditCardDetails').style.display = 'block';
+            } else if (method === 'bankTransfer') {
+                document.getElementById('bankTransferDetails').style.display = 'block';
+            } else if (method === 'onlineBank') {
+                document.getElementById('onlineBankDetails').style.display = 'block';
 >>>>>>> b51ff0b (Initial commit)
             }
         }
         
+=======
+>>>>>>> Initial commit
         document.getElementById('checkoutForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -607,7 +852,11 @@
             localStorage.removeItem('checkoutCart');
             
             // Redirect to products page after successful purchase
+<<<<<<< HEAD
             window.location.href = 'Products/products.html';
+=======
+            window.location.href = 'checkout.html';
+>>>>>>> Initial commit
         });
         
         // Initialize the page

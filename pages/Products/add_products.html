@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <<<<<<< HEAD
+<<<<<<< HEAD
     <meta name="csrf-token" content="{{ csrf_token }}">
     <title>Add Products</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
@@ -16,6 +17,10 @@
 =======
     <title>Add Product - E-Commerce</title>
     <style>
+=======
+    <title>Add Product - E-Commerce</title>
+    <style>
+>>>>>>> Initial commit
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -79,13 +84,17 @@
             color: #333;
             text-decoration: none;
         }
+<<<<<<< HEAD
 >>>>>>> b51ff0b (Initial commit)
+=======
+>>>>>>> Initial commit
     </style>
 </head>
 <body>
     <header>
         <h1>E-Commerce Store</h1>
         <nav>
+<<<<<<< HEAD
             <div class="ui dropdown item" x-data="{ open: false }" @click="open = !open">
                 Products <i class="dropdown icon"></i>
                 <div class="menu" x-show="open" @click.outside="open = false">
@@ -112,6 +121,18 @@
                         <input type="number" step="0.01" placeholder="0.00" x-model="product.price" required>
                     </div>
 =======
+=======
+                <div>
+                    <a class="item" href="products.html">Products</a>
+                    <a class="item" href="add_products.html">Add Products</a>
+                    <a class="item" href="cart.html">Cart</a>
+                    <a class="item" href="checkout.html">Checkout</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+>>>>>>> Initial commit
     <div class="container">
         <div class="form-card">
             <h2>Add New Product</h2>
@@ -123,6 +144,7 @@
                 <div class="form-group">
                     <label for="price">Price ($)</label>
                     <input type="number" id="price" name="price" step="0.01" min="0" required>
+<<<<<<< HEAD
 >>>>>>> b51ff0b (Initial commit)
                 </div>
                 <div class="form-group">
@@ -133,21 +155,20 @@
                 <div class="field">
                     <label>Initial Inventory</label>
                     <input type="number" min="0" placeholder="Inventory" x-model="product.inventory" required>
+=======
                 </div>
-                <div class="field">
-                    <label>Product Image</label>
-                    <input type="file" id="productImage" @change="handleImageUpload" accept="image/*">
-                    <template x-if="imagePreview">
-                        <div>
-                            <img :src="imagePreview" class="image-preview">
-                            <button class="ui mini red button" @click="removeImage">Remove Image</button>
-                        </div>
-                    </template>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description"></textarea>
+>>>>>>> Initial commit
                 </div>
-                <button class="ui primary button" type="submit" :disabled="submitting">
-                    <span x-text="submitting ? 'Processing...' : 'Add Product'"></span>
-                </button>
+                <div class="form-group">
+                    <label for="image">Product Image</label>
+                    <input type="file" id="image" name="image">
+                </div>
+                <button type="submit">Add Product</button>
             </form>
+<<<<<<< HEAD
         </div>
 
         <div class="ui success message" x-show="showSuccess" x-transition>
@@ -170,10 +191,14 @@
             </form>
             <a href="#" onclick="navigate('products.html')" class="back-link">← Back to Products</a>
 >>>>>>> b51ff0b (Initial commit)
+=======
+            <a href="#" onclick="navigate('products.html')" class="back-link">← Back to Products</a>
+>>>>>>> Initial commit
         </div>
     </div>
 
     <script>
+<<<<<<< HEAD
 <<<<<<< HEAD
         function productForm() {
             return {
@@ -256,6 +281,8 @@
                 }
             }
 =======
+=======
+>>>>>>> Initial commit
         document.getElementById('addProductForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -285,12 +312,20 @@
             this.reset();
             
             // Redirect to products page
+<<<<<<< HEAD
             navigate('Products/products.html');
         });
         
         function navigate(page) {
             window.location.href = 'Products/products.html';
 >>>>>>> b51ff0b (Initial commit)
+=======
+            navigate('pages/Products/products.html');
+        });
+        
+        function navigate(page) {
+            window.location.href = page;
+>>>>>>> Initial commit
         }
     </script>
 </body>
